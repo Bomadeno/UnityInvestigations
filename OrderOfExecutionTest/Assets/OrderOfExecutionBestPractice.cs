@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class OrderOfExecutionBestPractice : MonoBehaviour
@@ -23,11 +22,13 @@ public class OrderOfExecutionBestPractice : MonoBehaviour
         if (initialized)
             return;
 
-        child = Instantiate(gameObject, transform);
+        child = new GameObject("Child");
+        child.transform.parent = transform;
+        initialized = true;
     }
 
     [ContextMenu("Do Something")]
-    void DoSomething()
+    internal void DoSomething()
     {
         if(!enableFaultyFunctionBehavior)
             InitializeIfNeeded();
@@ -39,11 +40,11 @@ public class OrderOfExecutionBestPractice : MonoBehaviour
     {
         if (child == null)
         {
-            Debug.Log("it's broken");
+            Debug.Log($"{gameObject.name} logic is <color=#FF0000>broken</color>", this);
         }
         else
         {
-            Debug.Log("it's ok");
+            Debug.Log($"{gameObject.name} logic is <color=#00FF00>ok</color>", this);
         }
     }
 
